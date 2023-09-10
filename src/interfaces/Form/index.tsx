@@ -10,6 +10,7 @@ import {
     Button,
     Checkbox,
     CircularProgress,
+    Fade,
     FormControl,
     FormControlLabel,
     FormLabel,
@@ -22,6 +23,7 @@ import {
     Radio,
     RadioGroup,
     Select,
+    Slide,
     TextField,
     styled
 } from '@mui/material';
@@ -138,23 +140,23 @@ export default function FormFiliacao({ back }: FormFiliacaoProps) {
         formData.set('uf', data.uf);
         formData.set('file', data.file);
 
-        // try {
-        //     const resp = await axios.post(
-        //         'http://api.webhookinbox.com/i/h30m6VMB/in/',
-        //         data
-        //     );
-        //     if (resp) {
-        //         showNotification('success', 'Dados enviados com sucesso!');
-        //         reset();
-        //         back();
-        //     }
-        // } catch (err) {
-        //     console.log('erro capturado = ', err);
-        // } finally {
-        //     setIsLoading(false);
-        // }
+        try {
+            const resp = await axios.post(
+                'http://api.webhookinbox.com/i/h30m6VMB/in/',
+                data
+            );
+            if (resp) {
+                showNotification('success', 'Dados enviados com sucesso!');
+                reset();
+                back();
+            }
+        } catch (err) {
+            console.log('erro capturado = ', err);
+        } finally {
+            setIsLoading(false);
+        }
 
-        // console.log('data = ', data);
+        console.log('data = ', data);
     }
 
     const handleFileChange = (event: any) => {
@@ -168,11 +170,18 @@ export default function FormFiliacao({ back }: FormFiliacaoProps) {
     };
 
     async function getAdressByCEP(cep: string) {
-        setIsLoading(true);
+        // setIsLoading(true);
         try {
             const resp = await axios.get(
                 `https://viacep.com.br/ws/${cep}/json/`
             );
+
+            if (resp.data.erro) {
+                showNotification(
+                    'warning',
+                    'Não enontramos um endereço com esse CEP!'
+                );
+            }
 
             setLogradouro(resp.data.logradouro);
             setCidade(resp.data.localidade);
@@ -183,10 +192,10 @@ export default function FormFiliacao({ back }: FormFiliacaoProps) {
             form.setValue('cidade', resp.data.localidade);
             form.setValue('uf', resp.data.uf);
             form.setValue('bairro', resp.data.bairro);
-            setIsLoading(false);
+            // setIsLoading(false);
         } catch (err) {
             console.log(err);
-            setIsLoading(false);
+            // setIsLoading(false);
         }
     }
 
@@ -427,11 +436,15 @@ export default function FormFiliacao({ back }: FormFiliacaoProps) {
                         </p>
                     )}
 
-                    {errors.file?.message && (
+                    <Fade
+                        in={errors.file?.message ? true : false}
+                        mountOnEnter
+                        unmountOnExit
+                    >
                         <p className="text-red-600 pb-2 mb-2 font-thin text-sm">
                             {errors.file?.message}
                         </p>
-                    )}
+                    </Fade>
 
                     <Grid container spacing={2}>
                         <Grid item xs={6}>

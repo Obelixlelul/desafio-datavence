@@ -21,9 +21,9 @@ Deverá ser utilizado nessa tarefa o React JS junto à algumas bibliotecas de su
 
 [x] React JS
 [x] React-hook-form
-[] yup
+[x] yup
 [x] tailwind
-[] React JS
+[x] React JS
 [x] MUI
 
 Opcional:
