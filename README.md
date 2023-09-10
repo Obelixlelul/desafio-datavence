@@ -1,38 +1,40 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Boa noite, Rafael,
 
-## Getting Started
+Dia da entrega: 11/09/2023 as 17hs.
 
-First, run the development server:
+Objetivos do teste:
+[x] Desenvolver uma landing page simples responsiva que redirecione para um formulário
+[x] Desenvolver um formulário responsivo que faça o envio das informações via requisição post no formato JSON.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+Descrição:
+[x] Landing page: pode ser algo simples, tendo algum texto, imagens e um botão para ir para o form (nessa tela é importante usar a criatividade)
+[] Formulário: o formulário deve ser algo simples e conter pelo menos um campo de texto, um select (ou autocomplete), um radio button e um checkbox; também deve fazer o envio de um arquivo de imagem, aceitando por exemplo, PNG, JPG, JPEG e GIF, além de arquivos PDF. Além disso, deve haver o consumo de alguma API, pode ser, por exemplo, a do IBGE ou a do Via CEP (que busca as informações com base no CEP).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+[x] text
+[x] select
+[x] radio
+[x] checkbox
+[x] input arquivo
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+Tecnologias:
+Deverá ser utilizado nessa tarefa o React JS junto à algumas bibliotecas de sua parte como React-hook-form, yup, tailwind css, MUI e o Styled-components (se necessário). A parte da landing page não é necessário utilizar o MUI, mas no formulário é importante para se manter um padrão com os formulários trabalhados na empresa.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+[x] React JS
+[x] React-hook-form
+[] yup
+[x] tailwind
+[] React JS
+[x] MUI
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Opcional:
+[] Implementação de temas no projeto. Por exemplo, permitir que o usuário altere entre tema dark e light (e se possível, pegar como padrão o do sistema do usuário)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Quanto ao tema é aberto, então sinta-se livre para trabalhar algo que você goste, como filmes ou livros, ou algo de seu interesse, por exemplo.
 
-## Learn More
+Lembre-se que é importante ter responsividade, e mostrar que sabe consumir api, e usar as libs ditas acima.
 
-To learn more about Next.js, take a look at the following resources:
+O envio dos dados pode ser feito para um backend ou para a api do webhook que mostra o que chegou ( http://webhookinbox.com/ ).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+//
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+// @ts-nocheck
