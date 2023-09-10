@@ -1,8 +1,10 @@
 'use-client';
 import { useContext, useEffect, useState } from 'react';
 import InputMask from 'react-input-mask';
-import { UseFormReturn } from 'react-hook-form';
+import { UseFormReturn, useForm } from 'react-hook-form';
 import axios from 'axios';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import {
     Button,
@@ -28,7 +30,6 @@ import { NotificationContext } from '@/contexts/NotificationContext';
 
 type FormFiliacaoProps = {
     back: () => void;
-    form: UseFormReturn;
 };
 
 const VisuallyHiddenInput = styled('input')`
@@ -43,8 +44,57 @@ const VisuallyHiddenInput = styled('input')`
     width: 1px;
 `;
 
-export default function FormFiliacao({ back, form }: FormFiliacaoProps) {
-    const { register, handleSubmit, watch } = form;
+type FormValues = {
+    email: string;
+    password: string;
+    cep: string;
+    logradouro: string;
+    numero: number;
+    cargo: string;
+    genero: string;
+    aceite_termos: string;
+    file: FileList;
+    uf: string;
+    cidade: string;
+    bairro: string;
+};
+
+const schema = yup.object({
+    email: yup
+        .string()
+        .email('O formato do e-mail não é valido!')
+        .required('Email é obrigatório!'),
+    password: yup
+        .string()
+        .min(8, 'A senha deve ter no mínimo 8 caracteres!')
+        .required(),
+    file: yup
+        .mixed()
+        .test('fileType', 'Formato de arquivo não suportado', (value: any) => {
+            if (!value) return true; // Permite campos vazios (nenhum arquivo selecionado)
+
+            const supportedFormats = [
+                'image/jpeg',
+                'image/jpg',
+                'image/png',
+                'image/gif',
+                'application/pdf'
+            ];
+
+            return supportedFormats.includes(value.type);
+        })
+});
+
+export default function FormFiliacao({ back }: FormFiliacaoProps) {
+    const form = useForm<FormValues>({
+        resolver: yupResolver(schema)
+    });
+
+    const { register, handleSubmit, watch, reset, formState, clearErrors } =
+        form;
+
+    const { errors } = formState;
+
     const cep = watch('cep');
 
     const { showNotification } = useContext(NotificationContext);
@@ -88,21 +138,21 @@ export default function FormFiliacao({ back, form }: FormFiliacaoProps) {
         formData.set('uf', data.uf);
         formData.set('file', data.file);
 
-        try {
-            const resp = await axios.post(
-                'http://api.webhookinbox.com/i/h30m6VMB/in/',
-                data
-            );
-            if (resp) {
-                showNotification('success', 'Dados enviados com sucesso!');
-                form.reset();
-                back();
-            }
-        } catch (err) {
-            console.log('erro capturado = ', err);
-        } finally {
-            setIsLoading(false);
-        }
+        // try {
+        //     const resp = await axios.post(
+        //         'http://api.webhookinbox.com/i/h30m6VMB/in/',
+        //         data
+        //     );
+        //     if (resp) {
+        //         showNotification('success', 'Dados enviados com sucesso!');
+        //         reset();
+        //         back();
+        //     }
+        // } catch (err) {
+        //     console.log('erro capturado = ', err);
+        // } finally {
+        //     setIsLoading(false);
+        // }
 
         // console.log('data = ', data);
     }
@@ -112,6 +162,7 @@ export default function FormFiliacao({ back, form }: FormFiliacaoProps) {
         form.setValue('file', file);
         if (file) {
             setFileName(file.name);
+            clearErrors('file');
         }
         setSelectedFile(file);
     };
@@ -132,9 +183,9 @@ export default function FormFiliacao({ back, form }: FormFiliacaoProps) {
             form.setValue('cidade', resp.data.localidade);
             form.setValue('uf', resp.data.uf);
             form.setValue('bairro', resp.data.bairro);
+            setIsLoading(false);
         } catch (err) {
             console.log(err);
-        } finally {
             setIsLoading(false);
         }
     }
@@ -152,16 +203,24 @@ export default function FormFiliacao({ back, form }: FormFiliacaoProps) {
                 <h2 className="mb-4">FORMULÁRIO DE FILIAÇÃO</h2>
 
                 <form autoComplete="off" onSubmit={handleSubmit(sendSubmit)}>
-                    <TextField
-                        label="Email"
-                        required
-                        variant="outlined"
-                        color="secondary"
-                        type="email"
-                        sx={{ mb: 3 }}
+                    <FormControl
                         fullWidth
-                        {...register('email')}
-                    />
+                        variant="outlined"
+                        style={{ marginBottom: '1rem' }}
+                    >
+                        <TextField
+                            label="Email"
+                            required
+                            variant="outlined"
+                            color="secondary"
+                            type="email"
+                            fullWidth
+                            {...register('email')}
+                        />
+                        <p className="error text-red-600">
+                            {errors.email?.message}
+                        </p>
+                    </FormControl>
 
                     <FormControl
                         fullWidth
@@ -191,7 +250,11 @@ export default function FormFiliacao({ back, form }: FormFiliacaoProps) {
                                 </InputAdornment>
                             }
                             label="Password"
+                            {...register('password')}
                         />
+                        <p className="error text-red-600">
+                            {errors.password?.message}
+                        </p>
                     </FormControl>
 
                     <InputMask mask="99999-999" maskChar={null}>
@@ -364,13 +427,19 @@ export default function FormFiliacao({ back, form }: FormFiliacaoProps) {
                         </p>
                     )}
 
+                    {errors.file?.message && (
+                        <p className="text-red-600 pb-2 mb-2 font-thin text-sm">
+                            {errors.file?.message}
+                        </p>
+                    )}
+
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
                             <Button
                                 variant="outlined"
                                 color="primary"
                                 onClick={() => {
-                                    form.reset();
+                                    reset();
                                     back();
                                 }}
                                 fullWidth

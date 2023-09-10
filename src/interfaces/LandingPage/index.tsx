@@ -5,7 +5,6 @@ import Image from 'next/image';
 import Testimonials from './Testimonials';
 import AboutUs from './AboutUs';
 import FormFiliacao from '../Form';
-import { useForm } from 'react-hook-form';
 
 const dataTestimonials = [
     {
@@ -30,8 +29,6 @@ const dataTestimonials = [
 
 export default function LandingPage() {
     const [switchToForm, setSwitchToForm] = useState(false);
-    const [notify, setNotify] = useState(false);
-    const form = useForm();
 
     const testimonialsRef = useRef<HTMLDivElement | null>(null);
     const aboutUsRef = useRef<HTMLDivElement | null>(null);
@@ -122,10 +119,7 @@ export default function LandingPage() {
                     )}
 
                     {switchToForm && (
-                        <FormFiliacao
-                            form={form}
-                            back={() => setSwitchToForm(false)}
-                        />
+                        <FormFiliacao back={() => setSwitchToForm(false)} />
                     )}
                 </main>
 
