@@ -1,7 +1,3 @@
-Boa noite, Rafael,
-
-Dia da entrega: 11/09/2023 as 17hs.
-
 Objetivos do teste:
 [x] Desenvolver uma landing page simples responsiva que redirecione para um formulário
 [x] Desenvolver um formulário responsivo que faça o envio das informações via requisição post no formato JSON.
@@ -34,7 +30,3 @@ Quanto ao tema é aberto, então sinta-se livre para trabalhar algo que você go
 Lembre-se que é importante ter responsividade, e mostrar que sabe consumir api, e usar as libs ditas acima.
 
 O envio dos dados pode ser feito para um backend ou para a api do webhook que mostra o que chegou ( http://webhookinbox.com/ ).
-
-//
-
-// @ts-nocheck
